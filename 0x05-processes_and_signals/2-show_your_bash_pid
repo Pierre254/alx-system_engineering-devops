@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # print bash PID
 # shellcheck disable=SC2009
-ps -faxu | grep bash
+ps aux --forest | grep bash
