@@ -1,5 +1,11 @@
-# Fixing the number of failed requests to 0
-exec { 'fix--for-nginx':
-  command => "sed -i 's/worker_processes 4;/worker_processes 7;/g' /etc/nginx/nginx.conf; sudo service nginx restart",
-  path    => ['/bin', '/usr/bin', '/usr/sbin']
+# fix max open file limit error
+exec {'increase max open files limit':
+  command => 'sed -i "s|15|15000|g" /etc/default/nginx',
+  path    => '/bin/:/sbin/:/usr/bin/:/usr/sbin/'
+}
+
+exec {'restart nginx':
+  require => Exec['increase max open files limit'],
+  command => 'sudo service nginx restart',
+  path    => '/bin/:/sbin/:/usr/bin/:/usr/sbin/'
 }
